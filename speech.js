@@ -111,6 +111,8 @@ updateCountry();
 select_dialect.selectedIndex = 11;
 showInfo('info_start');
 
+start_img.src = 'icon/start.gif'
+
 function updateCountry() {
     for (var i = select_dialect.options.length - 1; i >= 0; i--) {
     select_dialect.remove(i);
@@ -138,17 +140,17 @@ if (!('webkitSpeechRecognition' in window)) {
     recognition.onstart = function() {
     recognizing = true;
     showInfo('info_speak_now');
-    start_img.src = 'rec.gif';
+    start_img.src = 'icon/rec.gif';
     };
 
     recognition.onerror = function(event) {
     if (event.error == 'no-speech') {
-        start_img.src = 'start.gif';
+        start_img.src = 'icon/start.gif';
         showInfo('info_no_speech');
         ignore_onend = true;
     }
     if (event.error == 'audio-capture') {
-        start_img.src = 'start.gif';
+        start_img.src = 'icon/start.gif';
         showInfo('info_no_microphone');
         ignore_onend = true;
     }
@@ -167,7 +169,7 @@ if (!('webkitSpeechRecognition' in window)) {
     if (ignore_onend) {
         return;
     }
-    start_img.src = 'start.gif';
+    start_img.src = 'icon/start.gif';
     if (!final_transcript) {
         showInfo('info_start');
         return;
@@ -201,8 +203,47 @@ if (!('webkitSpeechRecognition' in window)) {
         }
     }
     final_transcript = capitalize(final_transcript);
-    final_span.innerHTML = linebreak(final_transcript);
-    interim_span.innerHTML = linebreak(interim_transcript);
+
+    console.log("num_char:%d,%d",final_transcript.length,interim_transcript.length);
+
+    var final_words=final_transcript.split(' ');
+    var inter_words=interim_transcript.split(' ');
+
+    console.log("num_words:%d,%d",final_words.length,inter_words.length);
+
+    var output_str='';
+
+    console.log(Math.min(1,2));
+
+    var display_limit=10;
+
+    if( inter_words.length < display_limit ){
+
+        for(var i=Math.max( 0 , final_words.length - (display_limit-inter_words.length) );i<final_words.length;i++){
+            output_str+= final_words[i];
+            output_str+= ' ';
+        }
+
+        for(var i=0;i<inter_words.length;i++){
+            output_str+= inter_words[i];
+            output_str+= ' ';
+        }
+    }
+    else{
+        for(var i=inter_words.length-10;i<inter_words.length;i++){
+            output_str+= inter_words[i];
+            output_str+= ' ';
+        }
+    }
+
+    console.log(output_str);
+    
+    //final_span.innerHTML = linebreak(final_transcript.slice(final_transcript.length - 150,final_transcript.length - 1));
+    //final_span.innerHTML = linebreak(final_transcript);
+    //interim_span.innerHTML = linebreak(interim_transcript.slice(interim_transcript.length - 150,interim_transcript.length - 1));
+    //interim_span.innerHTML = linebreak(interim_transcript);
+    interim_span.innerHTML = linebreak(output_str);
+
     if (final_transcript || interim_transcript) {
         showButtons('inline-block');
     }
@@ -258,6 +299,13 @@ function emailButton() {
     showInfo('');
 }
 
+function clearButton(){
+    final_transcript = '';
+    interim_transcript = '';
+    final_span.innerHTML = '';
+    interim_span.innerHTML = '';
+}
+
 function startButton(event) {
     if (recognizing) {
     recognition.stop();
@@ -269,7 +317,7 @@ function startButton(event) {
     ignore_onend = false;
     final_span.innerHTML = '';
     interim_span.innerHTML = '';
-    start_img.src = 'start.gif';
+    start_img.src = 'icon/start.gif';
     showInfo('info_allow');
     showButtons('none');
     start_timestamp = event.timeStamp;

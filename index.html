@@ -47,7 +47,7 @@
     #start_button {
     border: 0;
     background-color:transparent;
-    padding: 0;
+    padding: 1;
     }
     .interim {
     color: gray;
@@ -58,6 +58,9 @@
     }
     .button {
     display: none;
+    }
+    .clear_button {
+    
     }
     .marquee {
     margin: 20px auto;
@@ -70,7 +73,7 @@
     }
 
     #copy {
-    margin-top: 20px;
+      margin-top: 20px;
     }
 
     #copy > div {
@@ -126,7 +129,7 @@ a.c1 {font-weight: normal;}
           </p>
         </div>
         <div id="div_start">
-          <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img",src="start.gif"></button>
+          <button id="start_button" onclick="startButton(event)"><img alt="Start" id="start_img",src="icon/start.gif"></button>
         </div>
         <div id="results">
           <span class="final" id="final_span"></span> <span class="interim" id=
@@ -150,12 +153,15 @@ a.c1 {font-weight: normal;}
             <p>
               (See chrome://settings/handlers to change.)
             </p>
-          </div>
+          </div>        
         </div>
         <div class="compact marquee" id="div_language">
           <select id="select_language" onchange="updateCountry()">
             </select>&nbsp;&nbsp; <select id="select_dialect">
             </select>
+        </div>
+        <div id="clear">
+          <button class="clear_button" id="clear_button" onclick="clearButton()"> Clear </button>
         </div>
       </div>
     </div> 
